@@ -1,5 +1,7 @@
-lightgbm
-numpy
-pydantic
 fastapi
 uvicorn
+pydantic
+numpy
+scikit-learn
+lightgbm
+joblib
