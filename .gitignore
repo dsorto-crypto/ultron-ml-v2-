@@ -1,9 +1,3 @@
-# Ignore model artifacts
-model.pkl
-*.pkl
-ultron_v3_entry_lgbm.txt
-models/
-
 # Python cache
 __pycache__/
 *.pyc
