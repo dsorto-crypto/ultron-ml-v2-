@@ -3,3 +3,4 @@ numpy
 pydantic
 fastapi
 uvicorn
+joblib
