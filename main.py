@@ -15,10 +15,10 @@ import joblib
 # Load LightGBM model (joblib-serialized Booster)
 # -------------------------------------------------------
 try:
-    model = joblib.load("model.pkl")
-    print("[ULTRON-ML-V2] Model loaded successfully (joblib)")
+    model = joblib.load("models/entry_lgbm.pkl")
+    print("[ULTRON-ML-V2] Model loaded successfully from models/entry_lgbm.pkl")
 except Exception as e:
-    print("[ULTRON-ML-V2] WARNING: model.pkl not loaded — using placeholder model")
+    print("[ULTRON-ML-V2] WARNING: entry_lgbm.pkl not loaded — using placeholder model")
     print("Details:", e)
     model = None
 
