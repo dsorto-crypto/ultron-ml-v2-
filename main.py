@@ -38,6 +38,61 @@ def predict(payload: FeaturesV2):
     # Convert to numpy
     X = np.array(payload.features).reshape(1, -1)
 
+from pydantic import BaseModel
+
+class EntryRequest(BaseModel):
+    symbol: str
+    side: str
+    tf: str
+    combinedScore: float
+    qualityScore: float
+    atrPct: float
+
+@app.post("/score")
+async def score(req: EntryRequest):
+    """
+    Ultron V3 ML-V2 scoring endpoint.
+    Must return probUp, probDown, expectedPnL, expectedHoldTime, agreementScore.
+    """
+
+    if model is None:
+        return {
+            "ok": True,
+            "probUp": 0.5,
+            "probDown": 0.5,
+            "expectedPnL": 0.0,
+            "expectedHoldTime": 0,
+            "agreementScore": 0.0,
+            "note": "placeholder model active"
+        }
+
+    # Build feature vector (same order used during training)
+    features = [
+        req.combinedScore,
+        req.qualityScore,
+        req.atrPct
+    ]
+
+    import numpy as np
+
+    pred = model.predict(np.array(features).reshape(1, -1))[0]
+
+    probUp = float(pred)
+    probDown = 1.0 - probUp
+    expectedPnL = float(probUp - probDown)
+    expectedHoldTime = float(30 * probUp)
+    agreementScore = probUp
+
+    return {
+        "ok": True,
+        "probUp": probUp,
+        "probDown": probDown,
+        "expectedPnL": expectedPnL,
+        "expectedHoldTime": expectedHoldTime,
+        "agreementScore": agreementScore
+    }
+
+
     # ---------------------------------------------------
     # Placeholder inference if model is missing
     # ---------------------------------------------------
